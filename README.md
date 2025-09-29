@@ -1,16 +1,4 @@
-chat-app/
-│
-├── backend/
-│   ├── server.js
-│   ├── db.js
-│   └── package.json
-│
-├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-│
-└── README.md
+
 # Chat App - Fun Friday Group
 
 ## Features
