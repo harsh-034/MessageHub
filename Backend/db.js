@@ -1,34 +1,146 @@
-const mysql = require("mysql2");
+require("dotenv").config();
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306
-});
+const mysql = require("mysql2/promise");
 
-db.connect(err => {
-  if(err) console.error("Connection error:", err);
-  else console.log("✅ MySQL connected successfully!");
-});
+const DB_CONFIG = {
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASS || "",
+  database: process.env.DB_NAME || "chatdb",
+  port: Number(process.env.DB_PORT) || 3306,
 
-module.exports = db;
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+};
 
+const db = mysql.createPool(DB_CONFIG);
 
-// const mysql = require('mysql2');
+async function query(sql, params = []) {
+  const [result] = await db.execute(sql, params);
+  return result;
+}
 
-// const db = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "Harshgupta3034@", // your MySQL password
-//   database: "chatdb",
-//   port: 3306
-// });
+async function initDatabase() {
 
-// db.connect((err) => {
-//   if(err) console.error('Connection error:', err);
-//   else console.log('MySQL connected successfully!');
-// });
+  // USERS
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(30) NOT NULL UNIQUE,
+      password VARCHAR(255) NOT NULL,
+      last_seen DATETIME NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_unicode_ci
+  `);
 
-// module.exports = db;
+  // CONVERSATIONS
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS conversations (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      type ENUM('direct') NOT NULL DEFAULT 'direct',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_unicode_ci
+  `);
+
+  // CONVERSATION MEMBERS
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS conversation_members (
+      conversation_id INT NOT NULL,
+      user_id INT NOT NULL,
+
+      PRIMARY KEY (conversation_id, user_id),
+
+      CONSTRAINT fk_cm_conversation
+        FOREIGN KEY (conversation_id)
+        REFERENCES conversations(id)
+        ON DELETE CASCADE,
+
+      CONSTRAINT fk_cm_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+    )
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_unicode_ci
+  `);
+
+  // MESSAGES
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS messages (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+
+      conversation_id INT NOT NULL,
+      sender_id INT NOT NULL,
+      receiver_id INT NOT NULL,
+
+      message TEXT NOT NULL,
+
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+      CONSTRAINT fk_message_conversation
+        FOREIGN KEY (conversation_id)
+        REFERENCES conversations(id)
+        ON DELETE CASCADE,
+
+      CONSTRAINT fk_message_sender
+        FOREIGN KEY (sender_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+      CONSTRAINT fk_message_receiver
+        FOREIGN KEY (receiver_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+      INDEX idx_conversation_time (
+        conversation_id,
+        created_at,
+        id
+      ),
+
+      INDEX idx_sender (sender_id),
+      INDEX idx_receiver (receiver_id)
+    )
+    ENGINE=InnoDB
+    DEFAULT CHARSET=utf8mb4
+    COLLATE=utf8mb4_unicode_ci
+  `);
+
+  console.log("✅ Database tables ready!");
+}
+
+async function startDatabase() {
+  try {
+    await db.query("SELECT 1");
+
+    console.log("✅ MySQL connected successfully!");
+
+    await initDatabase();
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "❌ MySQL connection/setup failed:",
+      error.message
+    );
+
+    return false;
+  }
+}
+
+module.exports = {
+  db,
+  query,
+  initDatabase,
+  startDatabase
+};
