@@ -64,3 +64,20 @@ MessageHub is a clean and modern private messaging application built with **Node
 ```bash
 npm install
 node server.js
+
+http://localhost:5000
+
+
+POST   /api/register
+POST   /api/login
+GET    /api/me
+GET    /api/users
+GET    /api/messages/:receiverId
+POST   /api/messages
+DELETE /api/messages/:id
+DELETE /api/account
+
+```
+## 🔒 Security
+
+MessageHub uses JWT authentication and Bcrypt password hashing to protect user accounts.
