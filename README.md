@@ -1,13 +1,41 @@
-# MessageHub
+# 💬 MessageHub
 
-MessageHub is a modern private messaging web app built with Node.js, Express, MySQL, HTML, CSS, and JavaScript.
+### 🚀 Modern Private Messaging Web Application
 
-![MessageHub](LoginPageImage.png)
+MessageHub is a clean and modern private messaging application built with **Node.js, Express, MySQL, HTML, CSS, and JavaScript**.
 
-## Features
+<p align="center">
+  <img src="Logo.png" width="180" alt="MessageHub Logo">
+</p>
+
+<p align="center">
+  🔐 Secure Authentication &nbsp; • &nbsp;
+  💬 Private Chat &nbsp; • &nbsp;
+  🟢 Online Status
+</p>
+
+---
+
+## 📸 Screenshots
+
+### 🔐 Login Page
+
+<p align="center">
+  <img src="LoginPageImage.png" width="850" alt="MessageHub Login Page">
+</p>
+
+### 💬 Chat Page
+
+<p align="center">
+  <img src="ChatPageImage.png" width="850" alt="MessageHub Chat Page">
+</p>
+
+---
+
+## ✨ Features
 
 - 🔐 Login & Registration
-- 💬 Private messaging
+- 💬 Private one-to-one messaging
 - 🟢 Online/Offline status
 - 🔎 User search
 - ⚡ Automatic message updates
@@ -17,30 +45,22 @@ MessageHub is a modern private messaging web app built with Node.js, Express, My
 - 🔑 Bcrypt password security
 - 📱 Responsive UI
 
-## Tech Stack
+---
 
-Node.js • Express • MySQL • JavaScript • HTML • CSS • JWT • Bcrypt
+## 🛠️ Tech Stack
 
-## Installation
+**Frontend:** HTML • CSS • JavaScript
+
+**Backend:** Node.js • Express.js
+
+**Database:** MySQL
+
+**Security:** JWT • Bcrypt
+
+---
+
+## ⚙️ Installation
 
 ```bash
 npm install
 node server.js
-
-## Installation
-
-POST   /api/register
-POST   /api/login
-GET    /api/me
-GET    /api/users
-GET    /api/messages/:receiverId
-POST   /api/messages
-DELETE /api/messages/:id
-DELETE /api/account
-
-## Security
-
-MessageHub uses JWT authentication and Bcrypt password hashing. Users can only delete their own messages and account.
-
-## License
-For educational and personal use.
