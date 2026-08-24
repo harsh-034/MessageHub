@@ -1,29 +1,46 @@
+# MessageHub
 
-# Chat App - Fun Friday Group
+MessageHub is a modern private messaging web app built with Node.js, Express, MySQL, HTML, CSS, and JavaScript.
+
+![MessageHub](screenshot.png)
 
 ## Features
-- Multi-user chat with self vs other message colors
-- Auto-refresh messages every 2 seconds
-- Delete own messages using trash icon
-- Fully functional backend with Node.js + Express + MySQL
 
-## Setup
+- 🔐 Login & Registration
+- 💬 Private messaging
+- 🟢 Online/Offline status
+- 🔎 User search
+- ⚡ Automatic message updates
+- 🗑️ Delete messages
+- 👤 Delete account
+- 🔒 JWT authentication
+- 🔑 Bcrypt password security
+- 📱 Responsive UI
 
-### Backend
-1. Go to backend folder:
+## Tech Stack
 
-2. Install dependencies:
+Node.js • Express • MySQL • JavaScript • HTML • CSS • JWT • Bcrypt
 
-3. Create MySQL database & table:
-```sql
-CREATE DATABASE chatdb;
-USE chatdb;
+## Installation
 
-CREATE TABLE messages (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(50) DEFAULT 'Anonymous',
-  message TEXT NOT NULL,
-  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+```bash
+npm install
+node server.js
 
-npm start
+## Installation
+
+POST   /api/register
+POST   /api/login
+GET    /api/me
+GET    /api/users
+GET    /api/messages/:receiverId
+POST   /api/messages
+DELETE /api/messages/:id
+DELETE /api/account
+
+## Security
+
+MessageHub uses JWT authentication and Bcrypt password hashing. Users can only delete their own messages and account.
+
+## License
+For educational and personal use.
