@@ -2,7 +2,7 @@
 
 MessageHub is a modern private messaging web app built with Node.js, Express, MySQL, HTML, CSS, and JavaScript.
 
-![MessageHub](screenshot.png)
+![MessageHub](LoginPageImage.png)
 
 ## Features
 
